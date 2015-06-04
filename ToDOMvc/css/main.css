@@ -1,0 +1,21 @@
+.container{
+	width: 60%;
+	margin: 0 auto;
+}
+.container input{
+	padding: 20px;
+	min-width: 100%;
+	font-size: 30px;
+}
+.container .todo-list li{
+	list-style: none;
+	padding: 10px 0;
+	cursor: pointer;
+}
+.container .todo-list{
+	padding: 0;
+}
+.container .todo-list .done{
+	text-decoration: line-through;
+	opacity: 0.6;
+}
