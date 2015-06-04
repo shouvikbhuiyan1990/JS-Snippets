@@ -31,6 +31,17 @@ $(function(){
 			var fetchedata = this.getAllData();
 			fetchedata[id] = data;
 			localStorage.notes = JSON.stringify(fetchedata);
+		},
+		deleteNote : function(){
+			var fetchedata = this.getAllData();
+			var tempArray = [];
+			var count = 0;
+			fetchedata.map(function(value,index){
+				if(!value.done){
+					tempArray.push(value);
+				}
+			});
+			localStorage.notes = JSON.stringify(tempArray);
 		}
 	};
 	var view = {
@@ -43,6 +54,7 @@ $(function(){
 		render : function(){
 			//var uniqueId = controller.getId();
 			var completeCount = 0;
+			var totalRecords = 0;
 			var contentStr = '';
 			if( localStorage.notes ){
 				$.each(controller.getTodos(),function(k,v){
@@ -53,6 +65,7 @@ $(function(){
 				});
 				$('.todo-list').html(contentStr);
 				$.each(controller.getTodos(),function(k1,v1){
+					totalRecords++;
 					if($('.todo-list li:eq('+k1+')').hasClass('done')){
 						completeCount++;
 					}
@@ -65,9 +78,9 @@ $(function(){
 							controller.nodeEdit(id);
 							view.render();
 						}
-					}(v1.id));
+					}(k1));
 				});
-				$('.info-window .complete-count').html('Left Tasks ' + (controller.getId()-completeCount));
+				$('.info-window .complete-count').html('Left Tasks ' + (totalRecords-completeCount));
 			}
 		}
 	};
@@ -95,6 +108,10 @@ $(function(){
 					}
 				});
 			});
+			$('.delete-completed').click(function(){
+				controller.deleteTask();
+				view.render();
+			});
 		}
 	};
 
@@ -118,8 +135,11 @@ $(function(){
 		},
 		nodeEdit : function(id){
 			var allNote = this.getTodos();
-			allNote[id-1].done = !(allNote[id-1].done);
-			model.nodeEditModel(allNote[id-1],id-1);
+			allNote[id].done = !(allNote[id].done);
+			model.nodeEditModel(allNote[id],id);
+		},
+		deleteTask : function(){
+			model.deleteNote();
 		}
 	};
 
